@@ -10,7 +10,7 @@ The data consists of two months of data from an anonymous individual collected d
 
 
 
-First load the needed libraries / packages & Set the working directory  
+First load the needed libraries / packages and set the working directory  
 
 ```r
     library(ggplot2) # for plotting
@@ -29,15 +29,22 @@ First load the needed libraries / packages & Set the working directory
 
 
 ```r
-    activeDays <- activData %>% group_by(as.Date(date)) %>% summarise(totalSteps=mean(sum(steps)))
+    activeDays <- activData %>% group_by(as.Date(date)) %>% summarise(totalSteps=sum(steps))
     colnames(activeDays) <- c("date", "totalSteps")
     
-    histTotalSteps <- ggplot(data=activeDays, aes(x=date, y=totalSteps)) + 
-            geom_histogram(stat="identity", 
+    meanSteps <- mean((activeDays$totalSteps), na.rm = TRUE)
+    medianSteps <- median((activeDays$totalSteps), na.rm = TRUE)
+    
+    histTotalSteps <- ggplot(data=activeDays, aes(x=totalSteps)) + 
+            geom_histogram(stat="bin", 
                         col="dark green", 
                         fill="green", 
                         alpha = .2) + 
-            labs(title="Histogram for mean total number of steps taken per day", x="Date", y="Mean total of steps") 
+            labs(title="Histogram for mean total number of steps taken per day", x="Number of steps", y="Freqency") +
+            geom_vline(aes(xintercept=meanSteps), color="blue", linetype="dashed", size=1, vjust=0.5) + 
+            geom_text(aes(x=meanSteps, label="mean", y=8.5), colour="blue", angle=90, vjust=1.2, text=element_text(size=6)) +
+            geom_vline(aes(xintercept=meanSteps), color="red", linetype="dashed", size=0.5) + 
+            geom_text(aes(x=meanSteps, label="median", y=8.5), colour="red", angle=90, vjust=2.4, text=element_text(size=6))
     
     print(histTotalSteps)
 ```
@@ -45,13 +52,19 @@ First load the needed libraries / packages & Set the working directory
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ```r
-    meanSteps <- mean((activeDays$totalSteps), na.rm = TRUE)
-    
     cat("Mean total number of steps: ", meanSteps)
 ```
 
 ```
 ## Mean total number of steps:  10766.19
+```
+
+```r
+    cat("Median total number of steps: ", medianSteps)
+```
+
+```
+## Median total number of steps:  10765
 ```
 
 
