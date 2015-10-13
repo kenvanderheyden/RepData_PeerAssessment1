@@ -3,35 +3,65 @@ title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
     keep_md: true
+    echo: true
 ---
 
-### needed libraries / packages
-library(ggplot2)
+## Intro
 
-### set the correct working dir
-setwd("~/Documents/Machine Learning/reproducible research")
+This assignment makes use of data from a personal activity monitoring device.  
+The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.  
 
+    
+## Initialisation 
+
+First load the needed libraries / packages & Set the working directory  
+```{r}
+    library(ggplot2) # for plotting
+    library(dplyr) # for manipulating data 
+    setwd("~/Documents/Machine Learning/reproducible research/RepData_PeerAssessment1")
+```
 
 ## Loading and preprocessing the data
 
-
-
-# read in the data (code from the assignment, with altered location to match local data files)
-NEI <- readRDS("data/summarySCC_PM25.rds")
-SCC <- readRDS("data/Source_Classification_Code.rds") 
-
-
+```{r}
+    activData <- read.csv('activity.csv')
+```
 
 ## What is mean total number of steps taken per day?
 
+```{r}
+    activeDays <- activData %>% group_by(as.Date(date)) %>% summarise(totalSteps=mean(sum(steps)))
+    colnames(activeDays) <- c("date", "totalSteps")
+    
+    histTotalSteps <- ggplot(data=activeDays, aes(x=date, y=totalSteps)) + 
+            geom_histogram(stat="identity", 
+                        col="dark green", 
+                        fill="green", 
+                        alpha = .2) + 
+            labs(title="Histogram for mean total number of steps taken per day", x="Date", y="Mean total of steps")
+    
+    print(histTotalSteps)
+
+```
 
 
 ## What is the average daily activity pattern?
 
+```{r}
+    
+```
 
 
 ## Imputing missing values
 
+```{r}
+    
+```
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```{r}
+    
+```
+
