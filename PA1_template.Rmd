@@ -14,7 +14,11 @@ The data consists of two months of data from an anonymous individual collected d
     
 ## Initialisation 
 
-First load the needed libraries / packages & Set the working directory  
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+First load the needed libraries / packages and set the working directory  
 ```{r}
     library(ggplot2) # for plotting
     library(dplyr) # for manipulating data 
@@ -38,9 +42,13 @@ First load the needed libraries / packages & Set the working directory
                         col="dark green", 
                         fill="green", 
                         alpha = .2) + 
-            labs(title="Histogram for mean total number of steps taken per day", x="Date", y="Mean total of steps")
+            labs(title="Histogram for mean total number of steps taken per day", x="Date", y="Mean total of steps") 
     
     print(histTotalSteps)
+    
+    meanSteps <- mean((activeDays$totalSteps), na.rm = TRUE)
+    
+    cat("Mean total number of steps: ", meanSteps)
 
 ```
 
