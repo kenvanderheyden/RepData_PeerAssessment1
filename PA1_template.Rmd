@@ -5,8 +5,20 @@ output:
     keep_md: true
 ---
 
+### needed libraries / packages
+library(ggplot2)
+
+### set the correct working dir
+setwd("~/Documents/Machine Learning/reproducible research")
+
 
 ## Loading and preprocessing the data
+
+
+
+# read in the data (code from the assignment, with altered location to match local data files)
+NEI <- readRDS("data/summarySCC_PM25.rds")
+SCC <- readRDS("data/Source_Classification_Code.rds") 
 
 
 
