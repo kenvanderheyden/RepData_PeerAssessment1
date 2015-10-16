@@ -61,10 +61,15 @@ First load the needed libraries / packages and set the working directory
 ## What is the average daily activity pattern?
 
 ```{r}
+    averageStepsPerTimeBlock <- aggregate(x=list(meanSteps=activData$steps), by=list(interval=activData$interval), FUN=mean, na.rm=TRUE)
     
+    ggplot(data=averageStepsPerTimeBlock, aes(x=interval, y=meanSteps)) +
+        geom_line(colour="blue") + 
+        xlab("Intervals") +
+        ylab("Average daily steps") 
 ```
-
-
+  
+  
 ## Imputing missing values
 
 ```{r}
