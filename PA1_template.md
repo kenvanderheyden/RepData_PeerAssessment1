@@ -15,6 +15,7 @@ First load the needed libraries / packages and set the working directory
 ```r
     library(ggplot2) # for plotting
     library(dplyr) # for manipulating data 
+    library(Hmisc) # for the impute function (had to install this package first in rstudio)
     setwd("~/Documents/Machine Learning/reproducible research/RepData_PeerAssessment1")
 ```
 
@@ -75,20 +76,81 @@ First load the needed libraries / packages and set the working directory
     averageStepsPerTimeBlock <- aggregate(x=list(meanSteps=activData$steps), by=list(interval=activData$interval), FUN=mean, na.rm=TRUE)
     
     ggplot(data=averageStepsPerTimeBlock, aes(x=interval, y=meanSteps)) +
-        geom_line(colour="blue") +
+        geom_line(colour="blue") + 
         xlab("Intervals") +
         ylab("Average daily steps") 
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
-
-```r
-    #ggplot(data=activData, aes(x=interval, y=steps)) + geom_line() + xlab("Interval") + ylab("Steps")
-```
   
   
 ## Imputing missing values
 
+Calculation of the missing values in the set: 
+
+
+```r
+    missingCount <- sum(is.na(activData$steps))
+    cat("Number of missing values: ", missingCount)
+```
+
+```
+## Number of missing values:  2304
+```
+
+Create a new dataset with the missing values added. 
+The impute function is designed for this task: import / add missing data to a set based on a function, I choose the mean function. 
+Impute is from the 
+
+First create a new set, then add the missing values using the mean parameter with the impute function. 
+
+
+```r
+    activDataCompleted <- activData
+    activDataCompleted$steps <- impute(activData$steps, fun=mean)
+```
+
+## What is mean total number of steps taken per day taken into account the imputed values ?
+
+
+```r
+    activeDays <- activDataCompleted %>% group_by(as.Date(date)) %>% summarise(totalSteps=sum(steps))
+    colnames(activeDays) <- c("date", "totalSteps")
+    
+    meanSteps <- mean((activeDays$totalSteps), na.rm = TRUE)
+    medianSteps <- median((activeDays$totalSteps), na.rm = TRUE)
+    
+    histTotalSteps <- ggplot(data=activeDays, aes(x=totalSteps)) + 
+            geom_histogram(stat="bin", 
+                        col="dark green", 
+                        fill="green", 
+                        alpha = .2) + 
+            labs(title="Histogram for mean total number of steps taken per day with imouted data", x="Number of steps", y="Freqency") +
+            geom_vline(aes(xintercept=meanSteps), color="blue", linetype="dashed", size=1, vjust=0.5) + 
+            geom_text(aes(x=meanSteps, label="mean", y=8.5), colour="blue", angle=90, vjust=1.2, text=element_text(size=6)) +
+            geom_vline(aes(xintercept=meanSteps), color="red", linetype="dashed", size=0.5) + 
+            geom_text(aes(x=meanSteps, label="median", y=8.5), colour="red", angle=90, vjust=2.4, text=element_text(size=6))
+    
+    print(histTotalSteps)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+
+```r
+    cat("Mean total number of steps incl imputed data: ", meanSteps)
+```
+
+```
+## Mean total number of steps incl imputed data:  10766.19
+```
+
+```r
+    cat("Median total number of steps incl imputed data: ", medianSteps)
+```
+
+```
+## Median total number of steps incl imputed data:  10766.19
+```
 
 
 
