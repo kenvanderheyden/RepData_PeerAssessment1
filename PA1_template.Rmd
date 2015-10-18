@@ -73,6 +73,7 @@ First load the needed libraries / packages and set the working directory
   
 ## Imputing missing values
 
+Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)  
 Calculation of the missing values in the set: 
 
 ```{r}
@@ -80,18 +81,20 @@ Calculation of the missing values in the set:
     cat("Number of missing values: ", missingCount)
 ```
 
-Create a new dataset with the missing values added. 
+Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.  
+Create a new dataset with the missing values added.   
 The impute function is designed for this task: import / add missing data to a set based on a function, I choose the mean function. 
-Impute is from the 
+Impute is from the Hmisc package.   
 
-First create a new set, then add the missing values using the mean parameter with the impute function. 
+First create a new set, then add the missing values using the mean parameter with the impute function.   
 
 ```{r}
     activDataCompleted <- activData
     activDataCompleted$steps <- impute(activData$steps, fun=mean)
 ```
 
-## What is mean total number of steps taken per day taken into account the imputed values ?
+## What is mean total number of steps taken per day taken into account the imputed values ?  
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 ```{r}
     activeDays <- activDataCompleted %>% group_by(as.Date(date)) %>% summarise(totalSteps=sum(steps))
@@ -119,9 +122,23 @@ First create a new set, then add the missing values using the mean parameter wit
 
 
 
-## Are there differences in activity patterns between weekdays and weekends?
+## Are there differences in activity patterns between weekdays and weekends?  
+
+Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.  
+Using the wday function, returns 0–6 day of the week, starting on Sunday. I used the days of week with 0 and 6 as weekend. And 1 to 5 as work week. 
+
 
 ```{r}
-    
+    activDataCompleted <- activDataCompleted %>% mutate(dateType = ifelse(as.POSIXlt(activDataCompleted$date)$wday %in% c(1,5), 'weekend', 'weekday'))
 ```
+  
+Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.  
 
+```{r}
+    activDataCompleted <- aggregate(steps ~ interval + dateType, data=activDataCompleted, mean)
+    ggplot(activDataCompleted, aes(interval, steps)) + 
+        geom_line(colour="blue") + 
+        facet_grid(dateType ~ .) +
+        xlab("Intervals") + 
+        ylab("Mean number of steps")
+```
