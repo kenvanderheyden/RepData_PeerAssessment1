@@ -36,7 +36,8 @@ First load the needed libraries / packages and set the working directory
     meanSteps <- mean((activeDays$totalSteps), na.rm = TRUE)
     medianSteps <- median((activeDays$totalSteps), na.rm = TRUE)
     
-    histTotalSteps <- ggplot(data=activeDays, aes(x=totalSteps)) + 
+    #histTotalSteps <- 
+        ggplot(data=activeDays, aes(x=totalSteps)) + 
             geom_histogram(stat="bin", 
                         col="dark green", 
                         fill="green", 
@@ -46,13 +47,12 @@ First load the needed libraries / packages and set the working directory
             geom_text(aes(x=meanSteps, label="mean", y=8.5), colour="blue", angle=90, vjust=1.2, text=element_text(size=6)) +
             geom_vline(aes(xintercept=meanSteps), color="red", linetype="dashed", size=0.5) + 
             geom_text(aes(x=meanSteps, label="median", y=8.5), colour="red", angle=90, vjust=2.4, text=element_text(size=6))
-    
-    print(histTotalSteps)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ```r
+    #print(histTotalSteps)
     cat("Mean total number of steps: ", meanSteps)
 ```
 
@@ -123,7 +123,8 @@ Make a histogram of the total number of steps taken each day and Calculate and r
     meanSteps <- mean((activeDays$totalSteps), na.rm = TRUE)
     medianSteps <- median((activeDays$totalSteps), na.rm = TRUE)
     
-    histTotalSteps <- ggplot(data=activeDays, aes(x=totalSteps)) + 
+    # histTotalSteps <- 
+        ggplot(data=activeDays, aes(x=totalSteps)) + 
             geom_histogram(stat="bin", 
                         col="dark green", 
                         fill="green", 
@@ -133,13 +134,12 @@ Make a histogram of the total number of steps taken each day and Calculate and r
             geom_text(aes(x=meanSteps, label="mean", y=8.5), colour="blue", angle=90, vjust=1.2, text=element_text(size=6)) +
             geom_vline(aes(xintercept=meanSteps), color="red", linetype="dashed", size=0.5) + 
             geom_text(aes(x=meanSteps, label="median", y=8.5), colour="red", angle=90, vjust=2.4, text=element_text(size=6))
-    
-    print(histTotalSteps)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
 
 ```r
+    # print(histTotalSteps)
     cat("Mean total number of steps incl imputed data: ", meanSteps)
 ```
 
